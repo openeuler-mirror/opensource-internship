@@ -1,0 +1,13 @@
+openEuler kernel开源实习成果归总目录
+
+开源实习开发者请按照下面汇总方式汇总。
+
+汇总目录格式:
+  - kernel
+    - 张三
+	  - 补丁集
+	     0001-xxx.patch
+		 0002-xxx.patch
+      - 测试报告
+	     测试用例.tar
+         测试报告.docx
