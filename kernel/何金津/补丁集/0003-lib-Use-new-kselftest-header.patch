@@ -1,0 +1,129 @@
+From 6b1a4d5b1a26ae830d50e08d7b3ca0e8b3e6b453 Mon Sep 17 00:00:00 2001
+From: "Tobin C. Harding" <tobin@kernel.org>
+Date: Fri, 5 Apr 2019 12:58:57 +1100
+Subject: [PATCH openEuler-1.0-LTS v2 3/6] lib: Use new kselftest header
+
+mainline inclusion
+from mainline-v5.1-rc4
+commit 6b1a4d5b1a26ae830d50e08d7b3ca0e8b3e6b453
+category: feature
+bugzilla: https://gitee.com/openeuler/kernel/issues/I4BUC2
+CVE: NA
+-----------------------------------------------------
+
+
+We just added a new C header file for use with test modules that are
+intended to be run with kselftest.  We can reduce code duplication by
+using this header.
+
+Use new kselftest header to reduce code duplication in test_printf and
+test_bitmap test modules.
+
+Acked-by: Kees Cook <keescook@chromium.org>
+Signed-off-by: Tobin C. Harding <tobin@kernel.org>
+Signed-off-by: Shuah Khan <shuah@kernel.org>
+Signed-off-by: He Jinjin <jinjin@isrc.iscas.ac.cn>
+---
+ lib/test_bitmap.c | 20 ++++----------------
+ lib/test_printf.c | 23 +++++------------------
+ 2 files changed, 9 insertions(+), 34 deletions(-)
+
+diff --git a/lib/test_bitmap.c b/lib/test_bitmap.c
+index 6cd7d0740005..792d90608052 100644
+--- a/lib/test_bitmap.c
++++ b/lib/test_bitmap.c
+@@ -12,6 +12,8 @@
+ #include <linux/slab.h>
+ #include <linux/string.h>
+ 
++#include "../tools/testing/selftests/kselftest_module.h"
++
+ static unsigned total_tests __initdata;
+ static unsigned failed_tests __initdata;
+ 
+@@ -361,7 +363,7 @@ static void noinline __init test_mem_optimisations(void)
+ 	}
+ }
+ 
+-static int __init test_bitmap_init(void)
++static void __init selftest(void)
+ {
+ 	test_zero_clear();
+ 	test_fill_set();
+@@ -369,22 +371,8 @@ static int __init test_bitmap_init(void)
+ 	test_bitmap_arr32();
+ 	test_bitmap_parselist();
+ 	test_mem_optimisations();
+-
+-	if (failed_tests == 0)
+-		pr_info("all %u tests passed\n", total_tests);
+-	else
+-		pr_warn("failed %u out of %u tests\n",
+-			failed_tests, total_tests);
+-
+-	return failed_tests ? -EINVAL : 0;
+ }
+ 
+-static void __exit test_bitmap_cleanup(void)
+-{
+-}
+-
+-module_init(test_bitmap_init);
+-module_exit(test_bitmap_cleanup);
+-
++KSTM_MODULE_LOADERS(test_bitmap);
+ MODULE_AUTHOR("david decotigny <david.decotigny@googlers.com>");
+ MODULE_LICENSE("GPL");
+diff --git a/lib/test_printf.c b/lib/test_printf.c
+index 601e8519319a..f4fcc1c43739 100644
+--- a/lib/test_printf.c
++++ b/lib/test_printf.c
+@@ -21,6 +21,8 @@
+ #include <linux/gfp.h>
+ #include <linux/mm.h>
+ 
++#include "../tools/testing/selftests/kselftest_module.h"
++
+ #define BUF_SIZE 256
+ #define PAD_SIZE 16
+ #define FILL_CHAR '$'
+@@ -590,12 +592,11 @@ test_pointer(void)
+ 	flags();
+ }
+ 
+-static int __init
+-test_printf_init(void)
++static void __init selftest(void)
+ {
+ 	alloced_buffer = kmalloc(BUF_SIZE + 2*PAD_SIZE, GFP_KERNEL);
+ 	if (!alloced_buffer)
+-		return -ENOMEM;
++		return;
+ 	test_buffer = alloced_buffer + PAD_SIZE;
+ 
+ 	test_basic();
+@@ -604,22 +605,8 @@ test_printf_init(void)
+ 	test_pointer();
+ 
+ 	kfree(alloced_buffer);
+-
+-	if (failed_tests == 0)
+-		pr_info("all %u tests passed\n", total_tests);
+-	else
+-		pr_warn("failed %u out of %u tests\n", failed_tests, total_tests);
+-
+-	return failed_tests ? -EINVAL : 0;
+ }
+ 
+-module_init(test_printf_init);
+-
+-static void __exit test_printf_exit(void)
+-{
+-}
+-
+-module_exit(test_printf_exit);
+-
++KSTM_MODULE_LOADERS(test_printf);
+ MODULE_AUTHOR("Rasmus Villemoes <linux@rasmusvillemoes.dk>");
+ MODULE_LICENSE("GPL");
+

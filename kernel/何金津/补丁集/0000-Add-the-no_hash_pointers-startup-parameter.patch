@@ -1,0 +1,33 @@
+From 275412a0591e25053875e0f83fcbbf3159d1796a Mon Sep 17 00:00:00 2001
+From: He Jinjin <jinjin@isrc.iscas.ac.cn>
+Date: Thu, 9 Dec 2021 14:47:08 +0800
+Subject: [PATCH openEuler-1.0-LTS v2 0/6] Add the no_hash_pointers startup parameter
+
+The address printed by %p in the kernel will expose the kernel address information, which is extremely unsafe.
+So Linux v4.15 limited the information printed by %p which will print a hashed value.
+
+This patchset add no_hash_pointers startup parameter which can disable the restriction that %P only prints hashed values, so that %P can print the actual address in the kernel.
+I patched this function and the test modules associated with this and passed these tests after recompiling.
+
+Tobin C. Harding (3):
+  lib/test_printf: Add empty module_exit function
+  kselftest: Add test module framework header
+  lib: Use new kselftest header
+
+Timur Tabi(3):
+  kselftest: add support for skipped tests
+  lib/vsprintf: no_hash_pointers prints all addresses as unhashed
+  lib: use KSTM_MODULE_GLOBALS macro in kselftest drivers
+
+ .../admin-guide/kernel-parameters.txt         |  15 +++
+ Documentation/dev-tools/kselftest.rst         |  94 +++++++++++++++++-
+ lib/test_bitmap.c                             |  23 +----
+ lib/test_printf.c                             |  29 +++---
+ lib/vsprintf.c                                |  36 ++++++-
+ tools/testing/selftests/kselftest_module.h    |  54 ++++++++++
+ 6 files changed, 215 insertions(+), 36 deletions(-)
+ create mode 100644 tools/testing/selftests/kselftest_module.h
+
+-- 
+2.30.0
+
