@@ -1,0 +1,59 @@
+From 4e89a78779647ca7ee2967551c599633fe9d3647 Mon Sep 17 00:00:00 2001
+From: Timur Tabi <timur@kernel.org>
+Date: Sun, 14 Feb 2021 10:13:46 -0600
+Subject: [PATCH openEuler-1.0-LTS v2 4/6] lib: use KSTM_MODULE_GLOBALS macro in kselftest drivers
+
+mainline inclusion
+from mainline-v5.11-rc2
+commit 4e89a78779647ca7ee2967551c599633fe9d3647
+category: feature
+bugzilla: https://gitee.com/openeuler/kernel/issues/I4BUC2
+CVE: NA
+-----------------------------------------------
+
+Instead of defining the total/failed test counters manually,
+test drivers that are clients of kselftest should use the
+macro created for this purpose.
+
+Signed-off-by: Timur Tabi <timur@kernel.org>
+Reviewed-by: Petr Mladek <pmladek@suse.com>
+Acked-by: Marco Elver <elver@google.com>
+Signed-off-by: Petr Mladek <pmladek@suse.com>
+Signed-off-by: He Jinjin <jinjin@isrc.iscas.ac.cn>
+Link: https://lore.kernel.org/r/20210214161348.369023-2-timur@kernel.org
+---
+ lib/test_bitmap.c | 3 +--
+ lib/test_printf.c | 4 ++--
+ 2 files changed, 3 insertions(+), 4 deletions(-)
+
+diff --git a/lib/test_bitmap.c b/lib/test_bitmap.c
+index 4425a1dd4ef1c..0ea0e8258f14a 100644
+--- a/lib/test_bitmap.c
++++ b/lib/test_bitmap.c
+@@ -16,8 +16,7 @@
+ 
+ #include "../tools/testing/selftests/kselftest_module.h"
+ 
+-static unsigned total_tests __initdata;
+-static unsigned failed_tests __initdata;
++KSTM_MODULE_GLOBALS();
+ 
+ static char pbl_buffer[PAGE_SIZE] __initdata;
+ 
+diff --git a/lib/test_printf.c b/lib/test_printf.c
+index 7ac87f18a10ff..ad2bcfa8caa12 100644
+--- a/lib/test_printf.c
++++ b/lib/test_printf.c
+@@ -30,8 +30,8 @@
+ #define PAD_SIZE 16
+ #define FILL_CHAR '$'
+ 
+-static unsigned total_tests __initdata;
+-static unsigned failed_tests __initdata;
++KSTM_MODULE_GLOBALS();
++
+ static char *test_buffer __initdata;
+ static char *alloced_buffer __initdata;
+ 
+
+
