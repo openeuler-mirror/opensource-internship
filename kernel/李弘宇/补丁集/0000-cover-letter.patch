@@ -1,0 +1,28 @@
+From c032e958da3894aabaca25b105bbf25d8f66e39d Mon Sep 17 00:00:00 2001
+From: Hongyu Li <543306408@qq.com>
+Date: Wed, 8 Dec 2021 23:48:56 +0800
+Subject: [PATCH OLK-5.10 0/2] Add the function to modify the reboot mode 
+via sysfs
+
+The current kernel needs to provide the reboot mode in the boot parameter. 
+However, we can not know this in advance. The kernel should have a method 
+to set the reboot options when the system is booted. 
+
+This patchset add handles in the <sysfs>/kernel/reboot to read reboot 
+configuration and rewrite it. Therefore users can change the reboot mode as
+they want.
+
+Matteo Croce (1):
+  reboot: allow to specify reboot mode via sysfs
+
+Nathan Chancellor (1):
+  reboot: Fix variable assignments in type_store
+
+ Documentation/ABI/testing/sysfs-kernel-reboot |  32 +++
+ kernel/reboot.c                               | 206 ++++++++++++++++++
+ 2 files changed, 238 insertions(+)
+ create mode 100644 Documentation/ABI/testing/sysfs-kernel-reboot
+
+-- 
+2.17.1
+
