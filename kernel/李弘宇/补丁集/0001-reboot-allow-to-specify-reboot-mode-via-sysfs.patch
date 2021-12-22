@@ -1,25 +1,35 @@
-From 818088f78729166b0f75a4ac3dcd85c2a7a735b1 Mon Sep 17 00:00:00 2001
+From 2c622ed0eaa38b68d7440bedb8c6cdd138b5a860 Mon Sep 17 00:00:00 2001
 From: Matteo Croce <mcroce@microsoft.com>
-Date: Tue, 10 Nov 2020 21:27:46 +0100
-Subject: [PATCH OLK-5.10 1/2] reboot: allow to specify reboot mode via 
-sysfs
+Date: Tue, 15 Dec 2020 20:46:57 -0800
+Subject: [PATCH OLK-5.10] reboot: allow to specify reboot mode via sysfs
 
-maillist inclusion
+mainline inclusion
 category: feature
-bugzilla: https://gitee.com/openeuler/kernel/issues/I4BULZ
+from mainline-v5.11
+commit 2c622ed0eaa38b68d7440bedb8c6cdd138b5a860
+bugzilla: https://gitee.com/openeuler/kernel/issues/I4BULZ 
 CVE: NA
 
-Reference: https://lore.kernel.org/all/20201110202746.9690-1-mcroce@linux.microsoft.com/T/#u 
+--------------------------------
 
-----------------------------------------------------------------------
+The kernel cmdline reboot= option offers some sort of control on how the
+reboot is issued.
 
-The kernel cmdline reboot= option offers some sort of control
-on how the reboot is issued.
-Add handles in sysfs to allow setting these reboot options, so they
-can be changed when the system is booted, other than at boot time.
+We don't always know in advance what type of reboot to perform.
 
-The handlers are under <sysfs>/kernel/reboot, can be read to
-get the current configuration and written to alter it.
+Sometimes a warm reboot is preferred to persist certain memory regions
+across the reboot.  Others a cold one is needed to apply a future system
+update that makes a memory memory model change, like changing the base
+page size or resizing a persistent memory region.
+
+Or simply we want to enable reboot_force because we noticed that
+something bad happened.
+
+Add handles in sysfs to allow setting these reboot options, so they can
+be changed when the system is booted, other than at boot time.
+
+The handlers are under <sysfs>/kernel/reboot, can be read to get the
+current configuration and written to alter it.
 
 	# cd /sys/kernel/reboot/
 
@@ -41,12 +51,27 @@ get the current configuration and written to alter it.
 	type:bios
 
 Before setting anything, check for CAP_SYS_BOOT capability, so it's
-possible to allow an unpriviledged process to change these settings
-simply by relaxing the handles permissions, without opening them to
-the world.
+possible to allow an unpriviledged process to change these settings simply
+by relaxing the handles permissions, without opening them to the world.
 
+[natechancellor@gmail.com: fix variable assignments in type_store]
+  Link: https://lkml.kernel.org/r/20201112035023.974748-1-natechancellor@gmail.com
+  Link: https://github.com/ClangBuiltLinux/linux/issues/1197
+
+Link: https://lkml.kernel.org/r/20201110202746.9690-1-mcroce@linux.microsoft.com
 Signed-off-by: Matteo Croce <mcroce@microsoft.com>
-Signed-off-by: Hongyu Li <543306408@qq.com>
+Signed-off-by: Nathan Chancellor <natechancellor@gmail.com>
+Reviewed-by: Petr Mladek <pmladek@suse.com>
+Cc: Mike Rapoport <rppt@kernel.org>
+Cc: Guenter Roeck <linux@roeck-us.net>
+Cc: Arnd Bergmann <arnd@arndb.de>
+Cc: Pavel Tatashin <pasha.tatashin@soleen.com>
+Cc: Kees Cook <keescook@chromium.org>
+Cc: Tyler Hicks <tyhicks@linux.microsoft.com>
+Cc: Nathan Chancellor <natechancellor@gmail.com>
+Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
+Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
+Signed-off-by: Li Hongyu <543306408@qq.com>
 ---
  Documentation/ABI/testing/sysfs-kernel-reboot |  32 +++
  kernel/reboot.c                               | 206 ++++++++++++++++++
@@ -92,10 +117,10 @@ index 000000000000..837330fb2511
 +Description:	Don't wait for any other CPUs on reboot and
 +		avoid anything that could hang.
 diff --git a/kernel/reboot.c b/kernel/reboot.c
-index af6f23d8bea1..778979d92dc7 100644
+index aa3bfd6c673b..940cbb784e17 100644
 --- a/kernel/reboot.c
 +++ b/kernel/reboot.c
-@@ -594,3 +594,209 @@ static int __init reboot_setup(char *str)
+@@ -600,3 +600,209 @@ static int __init reboot_setup(char *str)
  	return 1;
  }
  __setup("reboot=", reboot_setup);
@@ -205,19 +230,19 @@ index af6f23d8bea1..778979d92dc7 100644
 +		return -EPERM;
 +
 +	if (!strncmp(buf, BOOT_TRIPLE_STR, strlen(BOOT_TRIPLE_STR)))
-+		reboot_mode = BOOT_TRIPLE;
++		reboot_type = BOOT_TRIPLE;
 +	else if (!strncmp(buf, BOOT_KBD_STR, strlen(BOOT_KBD_STR)))
-+		reboot_mode = BOOT_KBD;
++		reboot_type = BOOT_KBD;
 +	else if (!strncmp(buf, BOOT_BIOS_STR, strlen(BOOT_BIOS_STR)))
-+		reboot_mode = BOOT_BIOS;
++		reboot_type = BOOT_BIOS;
 +	else if (!strncmp(buf, BOOT_ACPI_STR, strlen(BOOT_ACPI_STR)))
-+		reboot_mode = BOOT_ACPI;
++		reboot_type = BOOT_ACPI;
 +	else if (!strncmp(buf, BOOT_EFI_STR, strlen(BOOT_EFI_STR)))
-+		reboot_mode = BOOT_EFI;
++		reboot_type = BOOT_EFI;
 +	else if (!strncmp(buf, BOOT_CF9_FORCE_STR, strlen(BOOT_CF9_FORCE_STR)))
-+		reboot_mode = BOOT_CF9_FORCE;
++		reboot_type = BOOT_CF9_FORCE;
 +	else if (!strncmp(buf, BOOT_CF9_SAFE_STR, strlen(BOOT_CF9_SAFE_STR)))
-+		reboot_mode = BOOT_CF9_SAFE;
++		reboot_type = BOOT_CF9_SAFE;
 +	else
 +		return -EINVAL;
 +
