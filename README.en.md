@@ -9,14 +9,14 @@ Software architecture description
 #### Installation
 
 1.  xxxxxxx
-2.  xxxx
-3.  xxxx
+2.  xxxxxxx
+3.  xxxxxxx
 
 #### Instructions
 
 1.  xxxxxx
 2.  xxxxxx
-3.  xxxx
+3.  xxxxxx
 
 #### Contribution
 
