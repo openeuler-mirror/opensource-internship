@@ -16,7 +16,7 @@ Software architecture description
 
 1.  xxxxxx
 2.  xxxxxx
-3.  xxxx
+3.  xxxxxx
 
 #### Contribution
 
