@@ -1,4 +1,4 @@
 elasticsearch:
-  url: "http://127.0.0.1:9200"
+  url: "http://34.96.160.229:9200"
   username: "elastic"
-  password: "changeme"
+  password: "opensource"
