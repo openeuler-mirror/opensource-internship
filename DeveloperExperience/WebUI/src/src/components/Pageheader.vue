@@ -9,6 +9,21 @@
         <el-button type="danger" plain>成员</el-button>
         <el-button type="info" plain>添加</el-button>
       </div>
+      <el-dropdown class="dropmenu">
+        <span class="el-dropdown-link">
+          管理员，您好
+          <!-- <el-icon class="el-icon--right">
+            <arrow-down />
+          </el-icon> -->
+        </span>
+        <template #dropdown>
+          <el-dropdown-menu>
+            <el-dropdown-item class="text">管理员信息</el-dropdown-item>
+            <el-dropdown-item class="text">密码管理</el-dropdown-item>
+            <el-dropdown-item class="text">退出</el-dropdown-item>
+          </el-dropdown-menu>
+        </template>
+      </el-dropdown>
     </el-row>
   </div>
 </template>
@@ -49,5 +64,18 @@ export default defineComponent({
 
 .admin-text {
   margin-bottom: 10px;
+}
+.el-dropdown-link{
+  font-size: 20px;
+}
+.dropmenu{
+  position: absolute;
+  right: 0;
+  margin-top: 25px;
+  margin-right: 30px;
+}
+.text{
+  font-size: 18px;
+  margin: 10px 0px;
 }
 </style>

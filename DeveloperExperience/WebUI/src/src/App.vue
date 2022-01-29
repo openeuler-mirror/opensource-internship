@@ -1,4 +1,5 @@
 <template>
+  <title>开发者画像</title>
   <DeveloperPortrait />
   <Pageheader />
   <Pagenavbar />

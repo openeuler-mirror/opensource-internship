@@ -8,7 +8,7 @@
     <el-row class="tac">
       <el-col>
         <el-menu
-          default-active="2"
+          default-active="1"
           class="el-menu-vertical-demo leftmenu"
           @open="handleOpen"
           @close="handleClose"
@@ -16,7 +16,7 @@
           <el-menu-item index="1" class="items">
             <span>首页</span>
           </el-menu-item>
-          <el-menu-item index="2" class="items">
+          <el-menu-item index="2" class="items" @click="toRank">
             <span>社区排名</span>
           </el-menu-item>
           <el-menu-item index="3" class="items">
@@ -44,9 +44,11 @@
 </template>
 <script lang="ts">
 import { defineComponent } from "vue";
+
 export default defineComponent({
   name: "Pagenavbar",
 });
+
 </script>
 
 <style>
