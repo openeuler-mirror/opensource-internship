@@ -1,0 +1,4 @@
+elasticsearch:
+  url: "http://34.96.160.229:9200"
+  username: "elastic"
+  password: "opensource"

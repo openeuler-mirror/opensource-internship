@@ -1,9 +1,75 @@
 <template>
   <div class="portrait">
+    <el-row :gutter="24">
+      <el-col :span="12">
+        <div class="grid-content bg-purple chart-unit">
+          <div class="chart-title">Issue 状态分布</div>
+          <div class="lookarea">
+            <div
+              id="IssueStateDistribution"
+              :style="{ width: '100%', height: '100%' }"
+            ></div>
+          </div>
+        </div>
+      </el-col>
+      <el-col :span="12">
+        <div class="grid-content bg-purple chart-unit">
+          <div class="chart-title">历史 Issue 当前状态</div>
+          <div
+            id="CurrentStatusOfHistoricalIssue"
+            :style="{ width: '100%', height: '100%' }"
+          ></div>
+        </div>
+      </el-col>
+    </el-row>
+    <el-row :gutter="24">
+      <el-col :span="12">
+        <div class="grid-content bg-purple chart-unit">
+          <div class="chart-title">Issue OpenDays 分布</div>
+          <div class="lookarea">
+            <div
+              id="IssueOpenDaysDistribution"
+              :style="{ width: '100%', height: '100%' }"
+            ></div>
+          </div>
+        </div>
+      </el-col>
+      <el-col :span="12">
+        <div class="grid-content bg-purple chart-unit">
+          <div class="chart-title">Issue 天数分布</div>
+          <div
+            id="IssueDaysDistribution"
+            :style="{ width: '100%', height: '100%' }"
+          ></div>
+        </div>
+      </el-col>
+    </el-row>
+    <el-row :gutter="24">
+      <el-col :span="12">
+        <div class="grid-content bg-purple chart-unit">
+          <div class="chart-title">Issue FirstAttentionTime 分布</div>
+          <div class="lookarea">
+            <div
+              id="IssueFirstAttentionTimeDistribution"
+              :style="{ width: '100%', height: '100%' }"
+            ></div>
+          </div>
+        </div>
+      </el-col>
+      <el-col :span="12">
+        <div class="grid-content bg-purple chart-unit">
+          <div class="chart-title">开发者 Issue 行为记录</div>
+          <div
+            id="DeveloperIssueBehaviorRecord"
+            :style="{ width: '100%', height: '100%' }"
+          ></div>
+        </div>
+      </el-col>
+    </el-row>
     <el-row :gutter="20" class="firstrow">
       <el-col :span="7">
         <div class="grid-content bg-purple ele1">
-          <div class="text-biaoti">贡献排名</div>
+          <div class="chart-title">贡献排名</div>
           <table class="table1">
             <tr class="first-tr">
               <td>
@@ -52,13 +118,13 @@
       </el-col>
       <el-col :span="10">
         <div class="grid-content bg-purple ele2">
-          <div class="text-biaoti">Labels</div>
+          <div class="chart-title">Labels</div>
           <img
             alt="logo"
             src="../assets/picture.jpg"
             style="width: 80%; height: 30%"
           />
-          <div class="text-biaoti">协作网络</div>
+          <div class="chart-title">协作网络</div>
           <div
             id="XieZuoGuanXi"
             :style="{ width: '100%', height: '60%' }"
@@ -67,7 +133,7 @@
       </el-col>
       <el-col :span="7">
         <div class="grid-content bg-purple ele3">
-          <div class="text-biaoti">
+          <div class="chart-title">
             开源影响力
             <div class="tipsright">
               <div class="tips">
@@ -123,13 +189,9 @@
           <div class="tableMoKuai2">
             <div class="languagedata">
               <span>Most Used Language: Python</span>
-
-              <el-progress
-                :text-inside="true"
-                :stroke-width="26"
-                :color="colors"
-                :percentage="85"
-              />
+              <div class="pB_Container">
+                <processBar v-bind="processBarModel" />
+              </div>
             </div>
           </div>
 
@@ -141,7 +203,7 @@
     <el-row :gutter="20" class="secondrow">
       <el-col :span="17">
         <div class="grid-content bg-purple ele4">
-          <div class="text-biaoti">活跃度概览</div>
+          <div class="chart-title">活跃度概览</div>
           <div class="lookarea">
             <div
               id="HuoYueDuGaiLan"
@@ -152,7 +214,7 @@
       </el-col>
       <el-col :span="7">
         <div class="grid-content bg-purple ele5">
-          <div class="text-biaoti">NPS/NSS</div>
+          <div class="chart-title">NPS/NSS</div>
           <div id="NPSLeiDaTu" :style="{ width: '80%', height: '50%' }"></div>
           <table id="customers">
             <tr>
@@ -182,6 +244,8 @@ import { defineComponent } from "vue";
 import * as echarts from "echarts";
 import { onMounted } from "vue";
 import $ from "jquery";
+import ProcessBar from "./ProcessBar.vue";
+import axios from "axios";
 
 let base = +new Date(2021, 12, 1);
 let oneDay = 24 * 3600 * 1000;
@@ -210,8 +274,14 @@ interface GraphNode {
 }
 export default defineComponent({
   name: "DeveloperPortrait",
+  components: {
+    ProcessBar,
+  },
   data() {
     return {
+      processBarModel: {
+        processValue: [76.38, 3.23, 11.89, 0.43, 8.07],
+      },
       percentage: 10,
       colors: [
         { color: "#FFB6C1", percentage: 20 },
@@ -222,6 +292,7 @@ export default defineComponent({
       ],
     };
   },
+
   setup() {
     onMounted(() => {
       let HuoYueDuGaiLan = echarts.init(
@@ -297,17 +368,6 @@ export default defineComponent({
             return [pt[0], 130];
           },
         },
-        toolbox: {
-          left: "center",
-          itemSize: 25,
-          top: 55,
-          feature: {
-            dataZoom: {
-              yAxisIndex: "none",
-            },
-            restore: {},
-          },
-        },
         xAxis: {
           type: "time",
           axisPointer: {
@@ -316,17 +376,6 @@ export default defineComponent({
             lineStyle: {
               color: "#7581BD",
               width: 2,
-            },
-            label: {
-              show: true,
-              formatter: function (params: any) {
-                return echarts.format.formatTime("yyyy-MM-dd", params.value);
-              },
-              backgroundColor: "#7581BD",
-            },
-            handle: {
-              show: true,
-              color: "#7581BD",
             },
           },
           splitLine: {
@@ -542,11 +591,468 @@ export default defineComponent({
         animationEasing: "linear",
         animationEasingUpdate: "linear",
       });
+
+      let IssueStateDistribution = echarts.init(
+        document.getElementById("IssueStateDistribution")
+      );
+
+      axios.get("/api/es/IssueStateDistribution").then((response) => {
+        IssueStateDistribution.setOption({
+          legend: {
+            top: "2%",
+          },
+          series: [
+            {
+              name: "State",
+              type: "pie",
+              top: "10%",
+              bottom: "7%",
+              radius: ["40%", "60%"],
+              labelLine: {
+                length: 35,
+              },
+              label: {
+                formatter: "{a|{b}}{abg|}\n{hr|}\n  {b|}{c}  {per|{d}%}  ",
+                backgroundColor: "#F6F8FC",
+                borderColor: "#8C8D8E",
+                borderWidth: 1,
+                borderRadius: 4,
+                rich: {
+                  a: {
+                    color: "#6E7079",
+                    lineHeight: 22,
+                    align: "center",
+                  },
+                  hr: {
+                    borderColor: "#8C8D8E",
+                    width: "100%",
+                    borderWidth: 1,
+                    height: 0,
+                  },
+                  b: {
+                    color: "#4C5058",
+                    fontSize: 14,
+                    fontWeight: "bold",
+                    lineHeight: 33,
+                  },
+                  per: {
+                    color: "#fff",
+                    backgroundColor: "#4C5058",
+                    padding: [3, 4],
+                    borderRadius: 4,
+                  },
+                },
+              },
+              data: response["data"]["data"]["series"],
+            },
+          ],
+        });
+      });
+
+      let CurrentStatusOfHistoricalIssue = echarts.init(
+        document.getElementById("CurrentStatusOfHistoricalIssue")
+      );
+
+      axios.get("/api/es/CurrentStatusOfHistoricalIssue").then((response) => {
+        var data = response["data"]["data"];
+        var CurrentStatusOfHistoricalIssueOption = {
+          tooltip: {
+            trigger: "axis",
+            axisPointer: {
+              type: "shadow",
+            },
+          },
+          legend: { top: "2%" },
+          grid: {
+            left: "3%",
+            right: "4%",
+            bottom: "12%",
+            top: "17%",
+            containLabel: true,
+          },
+          xAxis: [
+            {
+              type: "category",
+              data: data["date"],
+            },
+          ],
+          yAxis: [
+            {
+              type: "value",
+            },
+          ],
+          series: [
+            {
+              name: "closed",
+              type: "bar",
+              stack: "Issue",
+              emphasis: {
+                focus: "series",
+              },
+              data: data["closed"],
+            },
+            {
+              name: "open",
+              type: "bar",
+              stack: "Issue",
+              emphasis: {
+                focus: "series",
+              },
+              data: data["open"],
+            },
+            {
+              name: "progressing",
+              type: "bar",
+              stack: "Issue",
+              emphasis: {
+                focus: "series",
+              },
+              data: data["progressing"],
+            },
+            {
+              name: "rejected",
+              type: "bar",
+              stack: "Issue",
+              emphasis: {
+                focus: "series",
+              },
+              data: data["rejected"],
+            },
+          ],
+        };
+
+        CurrentStatusOfHistoricalIssue.setOption(
+          CurrentStatusOfHistoricalIssueOption
+        );
+      });
+
+      let IssueOpenDaysDistribution = echarts.init(
+        document.getElementById("IssueOpenDaysDistribution")
+      );
+
+      axios.get("/api/es/IssueOpenDaysDistribution").then((response) => {
+        var Data = response["data"]["data"]["aggregations"]["2"]["buckets"];
+        IssueOpenDaysDistribution.setOption({
+          legend: {
+            top: "2%",
+          },
+          series: [
+            {
+              name: "State",
+              type: "pie",
+              top: "15%",
+              bottom: "7%",
+              radius: ["40%", "60%"],
+              labelLine: {
+                length: 35,
+              },
+              label: {
+                formatter: "  {d}% ",
+                backgroundColor: "#F6F8FC",
+                borderColor: "#8C8D8E",
+                borderWidth: 1,
+                borderRadius: 4,
+                rich: {
+                  a: {
+                    color: "#6E7079",
+                    lineHeight: 22,
+                    align: "center",
+                  },
+                  hr: {
+                    borderColor: "#8C8D8E",
+                    width: "100%",
+                    borderWidth: 1,
+                    height: 0,
+                  },
+                  b: {
+                    color: "#4C5058",
+                    fontSize: 14,
+                    fontWeight: "bold",
+                    lineHeight: 33,
+                  },
+                  per: {
+                    color: "#fff",
+                    backgroundColor: "#4C5058",
+                    padding: [3, 4],
+                    borderRadius: 4,
+                  },
+                },
+              },
+              data: [
+                {
+                  value: Data["0.0-1.0"]["doc_count"],
+                  name: "0 to 1",
+                },
+                {
+                  value: Data["1.0-3.0"]["doc_count"],
+                  name: "1 to 3",
+                },
+                {
+                  value: Data["3.0-7.0"]["doc_count"],
+                  name: "3 to 7",
+                },
+                {
+                  value: Data["7.0-14.0"]["doc_count"],
+                  name: "7 to 14",
+                },
+                {
+                  value: Data["14.0-30.0"]["doc_count"],
+                  name: "14 to 30",
+                },
+                {
+                  value: Data["30.0-180.0"]["doc_count"],
+                  name: "30 to 180",
+                },
+                {
+                  value: Data["180.0-360.0"]["doc_count"],
+                  name: "180 to 360",
+                },
+                {
+                  value: Data["360.0-*"]["doc_count"],
+                  name: "360 to +∞",
+                },
+              ],
+            },
+          ],
+        });
+      });
+
+      let IssueDaysDistribution = echarts.init(
+        document.getElementById("IssueDaysDistribution")
+      );
+
+      axios.get("/api/es/IssueDaysDistribution").then((response) => {
+        var data = response["data"]["data"];
+        var Option = {
+          tooltip: {
+            trigger: "axis",
+            axisPointer: {
+              type: "shadow",
+            },
+          },
+          legend: { top: "2%" },
+          grid: {
+            left: "3%",
+            right: "4%",
+            bottom: "12%",
+            top: "17%",
+            containLabel: true,
+          },
+          xAxis: [
+            {
+              type: "category",
+              data: data["day"],
+            },
+          ],
+          yAxis: [
+            {
+              type: "value",
+            },
+          ],
+          series: [
+            {
+              name: "closed",
+              type: "bar",
+              stack: "Issue",
+              emphasis: {
+                focus: "series",
+              },
+              data: data["closed"],
+            },
+            {
+              name: "open",
+              type: "bar",
+              stack: "Issue",
+              emphasis: {
+                focus: "series",
+              },
+              data: data["open"],
+            },
+            {
+              name: "progressing",
+              type: "bar",
+              stack: "Issue",
+              emphasis: {
+                focus: "series",
+              },
+              data: data["progressing"],
+            },
+            {
+              name: "rejected",
+              type: "bar",
+              stack: "Issue",
+              emphasis: {
+                focus: "series",
+              },
+              data: data["rejected"],
+            },
+          ],
+        };
+
+        IssueDaysDistribution.setOption(Option);
+      });
+
+      let IssueFirstAttentionTimeDistribution = echarts.init(
+        document.getElementById("IssueFirstAttentionTimeDistribution")
+      );
+
+      axios
+        .get("/api/es/IssueFirstAttentionTimeDistribution")
+        .then((response) => {
+          var Data = response["data"]["data"]["aggregations"]["2"]["buckets"];
+          IssueFirstAttentionTimeDistribution.setOption({
+            legend: {
+              // data: ["0 to 1", "1 to 3"],
+              top: "2%",
+            },
+            series: [
+              {
+                name: "State",
+                type: "pie",
+                top: "15%",
+                bottom: "7%",
+                radius: ["40%", "60%"],
+                labelLine: {
+                  length: 35,
+                },
+                label: {
+                  formatter: "  {d}% ",
+                  backgroundColor: "#F6F8FC",
+                  borderColor: "#8C8D8E",
+                  borderWidth: 1,
+                  borderRadius: 4,
+                  rich: {
+                    a: {
+                      color: "#6E7079",
+                      lineHeight: 22,
+                      align: "center",
+                    },
+                    hr: {
+                      borderColor: "#8C8D8E",
+                      width: "100%",
+                      borderWidth: 1,
+                      height: 0,
+                    },
+                    b: {
+                      color: "#4C5058",
+                      fontSize: 14,
+                      fontWeight: "bold",
+                      lineHeight: 33,
+                    },
+                    per: {
+                      color: "#fff",
+                      backgroundColor: "#4C5058",
+                      padding: [3, 4],
+                      borderRadius: 4,
+                    },
+                  },
+                },
+                data: [
+                  {
+                    value: Data["0.0-1.0"]["doc_count"],
+                    name: "0 to 1",
+                  },
+                  {
+                    value: Data["1.0-3.0"]["doc_count"],
+                    name: "1 to 3",
+                  },
+                  {
+                    value: Data["3.0-7.0"]["doc_count"],
+                    name: "3 to 7",
+                  },
+                  {
+                    value: Data["7.0-14.0"]["doc_count"],
+                    name: "7 to 14",
+                  },
+                  {
+                    value: Data["14.0-30.0"]["doc_count"],
+                    name: "14 to 30",
+                  },
+                  {
+                    value: Data["30.0-180.0"]["doc_count"],
+                    name: "30 to 180",
+                  },
+                  {
+                    value: Data["180.0-360.0"]["doc_count"],
+                    name: "180 to 360",
+                  },
+                  {
+                    value: Data["360.0-*"]["doc_count"],
+                    name: "360 to +∞",
+                  },
+                ],
+              },
+            ],
+          });
+        });
+
+      let DeveloperIssueBehaviorRecord = echarts.init(
+        document.getElementById("DeveloperIssueBehaviorRecord")
+      );
+
+      axios.get("/api/es/DeveloperIssueBehaviorRecord").then((response) => {
+        var data = response["data"]["data"];
+        var Option = {
+          tooltip: {
+            trigger: "axis",
+            axisPointer: {
+              type: "shadow",
+            },
+          },
+          legend: { top: "2%" },
+          grid: {
+            left: "3%",
+            right: "4%",
+            bottom: "12%",
+            top: "17%",
+            containLabel: true,
+          },
+          xAxis: [
+            {
+              type: "category",
+              data: data["date"],
+            },
+          ],
+          yAxis: [
+            {
+              type: "value",
+            },
+          ],
+          series: [
+            {
+              name: "comment",
+              type: "bar",
+              stack: "Issue",
+              emphasis: {
+                focus: "series",
+              },
+              data: data["comment"],
+            },
+            {
+              name: "creater",
+              type: "bar",
+              stack: "Issue",
+              emphasis: {
+                focus: "series",
+              },
+              data: data["creater"],
+            },
+          ],
+        };
+        DeveloperIssueBehaviorRecord.setOption(Option);
+      });
+
       window.onresize = function () {
         HuoYueDuGaiLan.resize();
         XieZuoGuanXi.resize();
         ShuJuTongJi.resize();
         NPSLeiDaTu.resize();
+        IssueStateDistribution.resize();
+        CurrentStatusOfHistoricalIssue.resize();
+        IssueOpenDaysDistribution.resize();
+        IssueDaysDistribution.resize();
+        IssueFirstAttentionTimeDistribution.resize();
+        DeveloperIssueBehaviorRecord.resize();
       };
     });
   },
@@ -558,48 +1064,12 @@ export default defineComponent({
   position: absolute;
   top: 80px;
   left: 230px;
-  bottom: 0px;
-  right: 0px;
   padding: 10px;
-  overflow-y: auto;
   background-color: rgb(245, 245, 245);
-}
-
-h3 {
-  margin: 40px 0 0;
-}
-
-ul {
-  list-style-type: none;
-  padding: 0;
-}
-
-li {
-  display: inline-block;
-  margin: 0 10px;
 }
 
 a {
   color: #42b983;
-}
-
-.pagemain {
-  position: absolute;
-  top: 50px;
-  left: 230px;
-  bottom: 0px;
-  right: 0px;
-  padding: 10px;
-  overflow-y: auto;
-  background-color: rgb(245, 245, 245);
-}
-
-.el-row:last-child {
-  margin-bottom: 0;
-}
-
-.el-col {
-  border-radius: 4px;
 }
 
 .bg-purple-dark {
@@ -614,17 +1084,13 @@ a {
   background: #e5e9f2;
 }
 
-.grid-content {
-  border-radius: 4px;
-  min-height: 36px;
-}
-
-.firstrow {
-  height: 61%;
-}
-
 .secondrow {
-  height: 30%;
+  height: 400px;
+}
+
+.chart-unit {
+  margin-bottom: 10px;
+  height: 355px;
 }
 
 .ele1,
@@ -658,7 +1124,7 @@ a {
   margin-left: 0%;
 }
 
-.text-biaoti {
+.chart-title {
   padding-top: 10px;
   padding-left: 10px;
   text-align: left;
@@ -667,10 +1133,9 @@ a {
 
 .text-biaotisecond {
   font-size: 20px;
-  padding-top: 10px;
-  padding-left: 10px;
+  padding-top: 5%;
+  padding-right: 57%;
   padding-bottom: 20px;
-  text-align: left;
   color: rgb(156, 155, 155);
 }
 
@@ -678,6 +1143,11 @@ a {
   display: inline-block;
   padding-right: 20px;
   text-align: center;
+}
+
+.chart-col {
+  padding-left: 5px;
+  padding-right: 5px;
 }
 
 .tips a {
@@ -705,12 +1175,11 @@ a {
   margin-top: 5px;
   text-align: left;
   margin-left: 10px;
-  margin-bottom: 15px;
   border: 1px solid rgb(211, 210, 210);
   border-radius: 4px;
   padding-top: 10px;
   padding-left: 10px;
-  padding-bottom: 10px;
+  padding-bottom: 120px;
 }
 
 .tabledata td {
@@ -740,19 +1209,23 @@ a {
   color: rgb(82, 151, 229);
   font-size: 22px;
   font-weight: 200;
+  margin-bottom: 30px;
+}
+.pB_Container {
+  margin: 20px 15px 20px 0px;
 }
 
 .viewbutton {
   background-color: #878ffe;
   border: none;
   color: white;
-  padding: 13px 95px;
+  padding: 18px 95px;
   text-align: center;
   border-radius: 4px;
   text-decoration: none;
   display: inline-block;
-  font-size: 18px;
-  margin: 4px 2px;
+  font-size: 20px;
+  margin-top: 2%;
   cursor: pointer;
 }
 
@@ -799,5 +1272,10 @@ a {
 
 .lookarea {
   display: inline;
+}
+
+.chart-div {
+  width: "100%";
+  height: "100%";
 }
 </style>
