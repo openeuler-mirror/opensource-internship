@@ -1,0 +1,73 @@
+From c0ff7918d3b6df4201b785060ab927c2ef31ceb0 Mon Sep 17 00:00:00 2001
+From: Zhu Dongjiang <dongjiang@isrc.iscas.ac.cn>
+Date: Wed, 2 Mar 2022 14:57:45 +0800
+Subject: [PATCH OLK-5.10 0/3] ftrace/x86: Allow for arguments to be passed in to ftrace_regs by default
+
+This is something I wanted to implement a long time ago, but held off until
+there was a good reason to do so. Now it appears that having access to the
+arguments of the function by default is very useful. As a bonus, because
+arguments must be saved regardless before calling a callback, because they
+need to be restored before returning back to the start of the traced
+function, there's not much work to do to have them always be there for
+normal function callbacks.
+
+The basic idea is that if CONFIG_HAVE_DYNAMIC_FTRACE_WITH_ARGS is set, then
+all callbacks registered to ftrace can use the regs parameter for the stack
+and arguments (kernel_stack_pointer(regs), regs_get_kernel_argument(regs, n)),
+without the need to set REGS that causes overhead by saving all registers as
+REGS simulates a breakpoint.
+
+This could be extended to move the REGS portion to kprobes itself, and
+remove the SAVE_REGS flag completely, but for now, kprobes still uses the
+full SAVE_REGS support.
+
+The last patch extends the WITH_ARGS to allow default function tracing to
+modify the instruction pointer, where livepatching for x86 no longer needs
+to save all registers.
+
+The idea of this approach is to give enough information to a callback that
+it could retrieve all arguments, which includes the stack pointer and
+instruction pointer.
+
+This can also be extended to modify the function graph tracer to use the
+function tracer instead of having a separate trampoline.
+
+Steven Rostedt (VMware) (3):
+  ftrace: Have the callbacks receive a struct ftrace_regs instead of
+    pt_regs
+  ftrace/x86: Allow for arguments to be passed in to ftrace_regs by
+    default
+  livepatch: Use the default ftrace_ops instead of REGS when ARGS is
+    available
+
+ arch/csky/kernel/probes/ftrace.c     |  4 +++-
+ arch/nds32/kernel/ftrace.c           |  4 ++--
+ arch/parisc/kernel/ftrace.c          |  7 ++++---
+ arch/powerpc/include/asm/livepatch.h |  4 +++-
+ arch/powerpc/kernel/kprobes-ftrace.c |  4 +++-
+ arch/s390/include/asm/livepatch.h    |  5 ++++-
+ arch/s390/kernel/ftrace.c            |  3 ++-
+ arch/x86/Kconfig                     |  1 +
+ arch/x86/include/asm/ftrace.h        | 18 ++++++++++++++++++
+ arch/x86/include/asm/livepatch.h     |  4 ++--
+ arch/x86/kernel/ftrace_64.S          | 15 +++++++++++++--
+ arch/x86/kernel/kprobes/ftrace.c     |  3 ++-
+ fs/pstore/ftrace.c                   |  2 +-
+ include/linux/ftrace.h               | 28 ++++++++++++++++++++++++++--
+ include/linux/kprobes.h              |  2 +-
+ kernel/livepatch/Kconfig             |  2 +-
+ kernel/livepatch/patch.c             | 10 ++++++----
+ kernel/trace/Kconfig                 |  9 +++++++++
+ kernel/trace/ftrace.c                | 27 +++++++++++++++------------
+ kernel/trace/trace_event_perf.c      |  2 +-
+ kernel/trace/trace_events.c          |  2 +-
+ kernel/trace/trace_functions.c       |  9 ++++-----
+ kernel/trace/trace_irqsoff.c         |  2 +-
+ kernel/trace/trace_sched_wakeup.c    |  2 +-
+ kernel/trace/trace_selftest.c        | 20 +++++++++++---------
+ kernel/trace/trace_stack.c           |  2 +-
+ 26 files changed, 136 insertions(+), 55 deletions(-)
+
+-- 
+2.30.0
+
