@@ -12,9 +12,6 @@
       <el-dropdown class="dropmenu">
         <span class="el-dropdown-link">
           管理员，您好
-          <!-- <el-icon class="el-icon--right">
-            <arrow-down />
-          </el-icon> -->
         </span>
         <template #dropdown>
           <el-dropdown-menu>
