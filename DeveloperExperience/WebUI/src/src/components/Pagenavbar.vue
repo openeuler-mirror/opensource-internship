@@ -1,7 +1,7 @@
 <template>
   <div class="navbar">
     <a href="#/">
-      <img alt="logo" src="../assets/openeuler-logo.png" style="width: 180px" />
+      <img alt="logo" src="../assets/logo.png" style="width: 150px" />
       <br />
       <span class="slogan">开发者画像数据分析及可视化</span>
     </a>

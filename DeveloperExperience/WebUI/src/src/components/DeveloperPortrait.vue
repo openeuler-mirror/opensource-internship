@@ -1,5 +1,64 @@
 <template>
   <div class="portrait">
+    <el-row :gutter="24" class="firstrow">
+      <el-col :span="7">
+        <div class="grid-content bg-purple ele1">
+          <div class="chart-title">贡献排名</div>
+          <table class="table1">
+            <tr class="first-tr">
+              <td>
+                <div class="data-progress">
+                  <el-progress
+                    type="dashboard"
+                    :percentage="19"
+                    :width="160"
+                    :color="colors"
+                  >
+                    <template #default="{ percentage }">
+                      <span class="percentage-value">{{ percentage }}%</span>
+                      <span class="percentage-label">Issue</span>
+                    </template>
+                  </el-progress>
+                </div>
+              </td>
+              <td>
+                <div class="data-progress">
+                  <el-progress
+                    type="dashboard"
+                    :percentage="57"
+                    :width="160"
+                    :color="colors"
+                  >
+                    <template #default="{ percentage }">
+                      <span class="percentage-value">{{ percentage }}%</span>
+                      <span class="percentage-label">PR/Commit</span>
+                    </template>
+                  </el-progress>
+                </div>
+              </td>
+            </tr>
+            <tr class="second-tr">
+              <td colspan="2">
+                <div
+                  class="ShuJuTongJi"
+                  id="ShuJuTongJi"
+                  :style="{ width: '95%', height: '100%' }"
+                ></div>
+              </td>
+            </tr>
+          </table>
+        </div>
+      </el-col>
+      <el-col :span="17">
+        <div class="grid-content bg-purple ele2">
+          <div class="chart-title">协作网络</div>
+          <div
+            id="XieZuoGuanXi"
+            :style="{ width: '100%', height: '80%' }"
+          ></div>
+        </div>
+      </el-col>
+    </el-row>
     <el-row :gutter="24">
       <el-col :span="12">
         <div class="grid-content bg-purple chart-unit">
@@ -65,127 +124,8 @@
           ></div>
         </div>
       </el-col>
-    </el-row>
-    <el-row :gutter="20" class="firstrow">
-      <el-col :span="7">
-        <div class="grid-content bg-purple ele1">
-          <div class="chart-title">贡献排名</div>
-          <table class="table1">
-            <tr class="first-tr">
-              <td>
-                <div class="data-progress">
-                  <el-progress
-                    type="dashboard"
-                    :percentage="19"
-                    :width="160"
-                    :color="colors"
-                  >
-                    <template #default="{ percentage }">
-                      <span class="percentage-value">{{ percentage }}%</span>
-                      <span class="percentage-label">Issue</span>
-                    </template>
-                  </el-progress>
-                </div>
-              </td>
-
-              <td>
-                <div class="data-progress">
-                  <el-progress
-                    type="dashboard"
-                    :percentage="57"
-                    :width="160"
-                    :color="colors"
-                  >
-                    <template #default="{ percentage }">
-                      <span class="percentage-value">{{ percentage }}%</span>
-                      <span class="percentage-label">PR/Commit</span>
-                    </template>
-                  </el-progress>
-                </div>
-              </td>
-            </tr>
-            <tr class="second-tr">
-              <td colspan="2">
-                <div
-                  class="ShuJuTongJi"
-                  id="ShuJuTongJi"
-                  :style="{ width: '95%', height: '100%' }"
-                ></div>
-              </td>
-            </tr>
-          </table>
-        </div>
-      </el-col>
-      <el-col :span="10">
-        <div class="grid-content bg-purple ele2">
-          <div class="chart-title">Labels</div>
-          <img
-            alt="logo"
-            src="../assets/picture.jpg"
-            style="width: 80%; height: 30%"
-          />
-          <div class="chart-title">协作网络</div>
-          <div
-            id="XieZuoGuanXi"
-            :style="{ width: '100%', height: '60%' }"
-          ></div>
-        </div>
-      </el-col>
       <el-col :span="7">
         <div class="grid-content bg-purple ele3">
-          <div class="chart-title">
-            开源影响力
-            <div class="tipsright">
-              <div class="tips">
-                <a>2</a>
-                <br />
-                <span>Stars</span>
-              </div>
-              <div class="tips">
-                <a>17</a>
-                <br />
-                <span>Watches</span>
-              </div>
-              <div class="tips">
-                <a>0</a>
-                <br />
-                <span>Followers</span>
-              </div>
-              <div class="tips">
-                <a>1</a>
-                <br />
-                <span>Following</span>
-              </div>
-            </div>
-          </div>
-          <div class="tableMoKuai">
-            <table class="tabledata">
-              <tr>
-                <td colspan="2"><span>Ming's Gitee Stats</span></td>
-              </tr>
-              <tr>
-                <td>Total Statrs Earned:</td>
-                <td>34.5k</td>
-              </tr>
-              <tr>
-                <td>Total Commits:</td>
-                <td>8.2k</td>
-              </tr>
-              <tr>
-                <td>Total PRs:</td>
-                <td>491</td>
-              </tr>
-              <tr>
-                <td>Total Issues:</td>
-                <td>122</td>
-              </tr>
-              <tr>
-                <td>Contributed to:</td>
-                <td>14</td>
-              </tr>
-            </table>
-          </div>
-
           <div class="tableMoKuai2">
             <div class="languagedata">
               <span>Most Used Language: Python</span>
@@ -194,45 +134,6 @@
               </div>
             </div>
           </div>
-
-          <div class="text-biaotisecond">Meetup/Meeting/Report</div>
-          <button class="viewbutton">查看报告</button>
-        </div>
-      </el-col>
-    </el-row>
-    <el-row :gutter="20" class="secondrow">
-      <el-col :span="17">
-        <div class="grid-content bg-purple ele4">
-          <div class="chart-title">活跃度概览</div>
-          <div class="lookarea">
-            <div
-              id="HuoYueDuGaiLan"
-              :style="{ width: '95%', height: '100%' }"
-            ></div>
-          </div>
-        </div>
-      </el-col>
-      <el-col :span="7">
-        <div class="grid-content bg-purple ele5">
-          <div class="chart-title">NPS/NSS</div>
-          <div id="NPSLeiDaTu" :style="{ width: '80%', height: '50%' }"></div>
-          <table id="customers">
-            <tr>
-              <th>序号</th>
-              <th>时间</th>
-              <th>指标名称</th>
-            </tr>
-            <tr>
-              <td>01</td>
-              <td>20220101</td>
-              <td>指标A</td>
-            </tr>
-            <tr class="alt">
-              <td>02</td>
-              <td>20220101</td>
-              <td>指标B</td>
-            </tr>
-          </table>
         </div>
       </el-col>
     </el-row>
@@ -295,10 +196,6 @@ export default defineComponent({
 
   setup() {
     onMounted(() => {
-      let HuoYueDuGaiLan = echarts.init(
-        document.getElementById("HuoYueDuGaiLan")
-      );
-      let NPSLeiDaTu = echarts.init(document.getElementById("NPSLeiDaTu"));
       let XieZuoGuanXi = echarts.init(document.getElementById("XieZuoGuanXi"));
       XieZuoGuanXi.showLoading();
       $.getJSON("/les-miserables.json", function (graph) {
@@ -306,36 +203,25 @@ export default defineComponent({
 
         graph.nodes.forEach(function (node: GraphNode) {
           node.label = {
-            show: node.symbolSize > 25,
+            show: node.symbolSize > 30,
           };
         });
         XieZuoGuanXi.setOption({
-          title: {
-            top: "bottom",
-            left: "right",
-          },
-          tooltip: {},
           legend: [
             {
               data: graph.categories.map(function (a: { name: string }) {
                 return a.name;
               }),
-              orient: "vertical",
-              left: "10%",
-              top: "15%",
             },
           ],
-          animationDurationUpdate: 1500,
+          color: ['#5470c6', '#91cc75', '#fac858', '#ee6666', '#73c0de', '#3ba272', '#fc8452', '#9a60b4', '#ea7ccc'],
+          animationDuration: 1500,
           animationEasingUpdate: "quinticInOut",
           series: [
             {
               name: "Les Miserables",
               type: "graph",
-              radius: ["5%", "10%"],
-              layout: "circular",
-              circular: {
-                rotateLabel: true,
-              },
+              layout: "none",
               data: graph.nodes,
               links: graph.links,
               categories: graph.categories,
@@ -348,165 +234,22 @@ export default defineComponent({
                 color: "source",
                 curveness: 0.3,
               },
+              emphasis: {
+                focus: "adjacency",
+                lineStyle: {
+                  width: 10,
+                },
+              },
             },
           ],
         });
       });
       let ShuJuTongJi = echarts.init(document.getElementById("ShuJuTongJi"));
 
-      HuoYueDuGaiLan.setOption({
-        title: {
-          left: "center",
-        },
-        legend: {
-          top: "bottom",
-          data: ["Intention"],
-        },
-        tooltip: {
-          triggerOn: "none",
-          position: function (pt) {
-            return [pt[0], 130];
-          },
-        },
-        xAxis: {
-          type: "time",
-          axisPointer: {
-            value: "2016-10-7",
-            snap: true,
-            lineStyle: {
-              color: "#7581BD",
-              width: 2,
-            },
-          },
-          splitLine: {
-            show: false,
-          },
-        },
-        yAxis: {
-          type: "value",
-          axisTick: {
-            inside: true,
-          },
-          splitLine: {
-            show: false,
-          },
-          axisLabel: {
-            inside: true,
-            formatter: "{value}\n",
-          },
-          z: 10,
-        },
-        grid: {
-          top: 110,
-          left: 15,
-          right: 15,
-          height: 160,
-        },
-        dataZoom: [
-          {
-            type: "inside",
-            throttle: 50,
-          },
-        ],
-        series: [
-          {
-            name: "Fake Data",
-            type: "line",
-            smooth: true,
-            symbol: "circle",
-            symbolSize: 5,
-            sampling: "average",
-            itemStyle: {
-              color: "#FDC147",
-            },
-            stack: "a",
-            areaStyle: {
-              color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
-                {
-                  offset: 0,
-                  color: "rgba(255,244,222,0.8)",
-                },
-                {
-                  offset: 1,
-                  color: "rgba(255,244,222,0.3)",
-                },
-              ]),
-            },
-            data: data,
-          },
-          {
-            name: "Fake Data",
-            type: "line",
-            smooth: true,
-            stack: "a",
-            symbol: "circle",
-            symbolSize: 5,
-            sampling: "average",
-            itemStyle: {
-              color: "#78A6FC",
-            },
-            areaStyle: {
-              color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
-                {
-                  offset: 0,
-                  color: "rgba(231,237,254,0.8)",
-                },
-                {
-                  offset: 1,
-                  color: "rgba(231,237,254,0.3)",
-                },
-              ]),
-            },
-            data: data2,
-          },
-        ],
-      });
       const data1: number[] = [];
       for (let i = 0; i < 7; ++i) {
         data1.push(Math.round(Math.random() * 100));
       }
-
-      NPSLeiDaTu.setOption({
-        legend: {
-          data: ["A", "B"],
-          orient: "vertical",
-          left: "80%",
-          top: "40%",
-        },
-        radar: {
-          indicator: [
-            { name: "SIG", max: 6500 },
-            { name: "发布", max: 16000 },
-            { name: "本地开发", max: 30000 },
-            { name: "PR", max: 38000 },
-            { name: "ISSUE", max: 52000 },
-          ],
-        },
-        series: [
-          {
-            type: "radar",
-            radius: ["8%", "12%"],
-            itemStyle: {
-              normal: {
-                color: function (params) {
-                  var colorList = ["#898EFC", "#caf5f5"];
-                  return colorList[params.dataIndex];
-                },
-              },
-            },
-            data: [
-              {
-                value: [4200, 3000, 20000, 35000, 50000],
-                name: "A",
-              },
-              {
-                value: [5000, 14000, 28000, 26000, 42000],
-                name: "B",
-              },
-            ],
-          },
-        ],
-      });
       ShuJuTongJi.setOption({
         xAxis: {
           show: false,
@@ -1043,10 +786,8 @@ export default defineComponent({
       });
 
       window.onresize = function () {
-        HuoYueDuGaiLan.resize();
         XieZuoGuanXi.resize();
         ShuJuTongJi.resize();
-        NPSLeiDaTu.resize();
         IssueStateDistribution.resize();
         CurrentStatusOfHistoricalIssue.resize();
         IssueOpenDaysDistribution.resize();
@@ -1084,8 +825,9 @@ a {
   background: #e5e9f2;
 }
 
-.secondrow {
-  height: 400px;
+.firstrow {
+  height: 500px;
+  margin-bottom: -35px;
 }
 
 .chart-unit {
