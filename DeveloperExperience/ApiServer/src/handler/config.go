@@ -18,8 +18,20 @@ func CheckError(err error) {
 
 type Config struct {
 	ElasticSearch ElasticSearch `yaml:"elasticsearch"`
+	Redis         Redis         `yaml:"redis"`
+	Cache         Cache         `yaml:"cache"`
 }
 
+type Cache struct {
+	Second int `yaml:"second"`
+}
+type Redis struct {
+	Network  string `yaml:"network"`
+	Host     string `yaml:"host"`
+	Port     string `yaml:"port"`
+	Password string `yaml:"password"`
+	Db       int    `yaml:"db"`
+}
 type ElasticSearch struct {
 	Url      string `yaml:"url"`
 	Username string `yaml:"username"`

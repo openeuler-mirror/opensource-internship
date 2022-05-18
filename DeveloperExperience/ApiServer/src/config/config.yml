@@ -1,4 +1,12 @@
 elasticsearch:
-  url: "http://34.96.160.229:9200"
+  url: "http://127.0.0.1:9200"
   username: "elastic"
-  password: "opensource"
+  password: "changeme"
+redis:
+  network: "tcp"
+  host: "127.0.0.1"
+  port: "6379"
+  password: ""
+  db: 0
+cache:
+  second: 300
