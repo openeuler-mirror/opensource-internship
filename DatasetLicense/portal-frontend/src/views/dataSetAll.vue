@@ -29,6 +29,17 @@
             <div class="search_box daset-flaot-box">
               <searchDataset />
             </div>
+            <button class="format-box daset-flaot-box">
+              <router-link
+                :to="{path: '/dataSetFormat'}"
+                target="_blank"
+                style="font-size: larger;
+                       color: aliceblue;
+                       text-decoration: none;"
+              >
+               Template
+              </router-link>
+            </button>
             <!--          登录部分-->
             <!-- <button class="login_box">Login</button> -->
             <!--          清除浮动部分-->
@@ -145,8 +156,21 @@ export default {
 };
 </script>
 
-<style>
-
+<style scoped>
+.format-box{
+  margin-right: 30px;
+  margin-top: 7px;
+  margin-left: 100px;
+  width: 80px;
+  height: 40px;
+  border-radius: 10px;
+  color: #ffffff;
+  background-color: #4c8efc;
+  line-height: 35px;
+  text-align: center;
+  border: 2px solid #ffffff;
+  font-style: normal;
+}
 .dataset-total-box {
   line-height: 32px;
   text-align: center;
@@ -315,6 +339,20 @@ export default {
   text-align: center;
   border: 2px solid #ffffff;
 }
+.format-box{
+  margin-right: 30px;
+  margin-top: 7px;
+  margin-left: 100px;
+  width: 80px;
+  height: 40px;
+  border-radius: 10px;
+  color: #ffffff;
+  background-color: #4c8efc;
+  line-height: 35px;
+  text-align: center;
+  border: 2px solid #ffffff;
+  font-style: normal;
+}
 
 /*欢迎语部分*/
 .welcome {
@@ -340,7 +378,7 @@ export default {
 }
 
 /* 谷歌下拉框placeholder提示字颜色 */
-.el-input__inner::-webkit-input-placeholder {
+>>> .el-input__inner::-webkit-input-placeholder {
   color: #fff !important;
   text-align: center !important;
 }
